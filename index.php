@@ -15,6 +15,8 @@
 	}
 	
 	
+	
+	
 	//POSTが存在しているか
 	if(!empty($_POST)){
 	//tokenを検証して一致していれば書き込み処理
@@ -45,10 +47,10 @@
 		$message_num_counter = 1;
 		while($line = fgetcsv($fp)){
 			
-			
+			$msg = str_replace("\n","<br>",$line[1]);
 			echo "<div>";
 			echo "<p><span class=\"message_num\" id=message_".$message_num_counter.">".$message_num_counter.":</span><span class = \"username_view\">".$line[0]."</span></p>";
-			echo "<p class = \"message_view\">".$line[1]."</p>";
+			echo "<p class = \"message_view\">".$msg."</p>";
 			echo "<p class = \"date_view\">".$line[2]."</p>";
 			echo "</div>";
 			$message_num_counter++;
