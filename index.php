@@ -6,6 +6,7 @@
 <?php
 	ini_set("display_errors",1);
 	define('FILE_PATH',"./logs/messages.csv");
+	date_default_timezone_set('Asia/Tokyo');
 	
 	//csrf対策のtokenをセット
 	session_start();
@@ -41,14 +42,16 @@
 <?php
 	$fp = fopen(FILE_PATH,"r");
 	if($fp){
+		$message_num_counter = 1;
 		while($line = fgetcsv($fp)){
 			
 			
 			echo "<div>";
-			echo "<p class = \"username_view\">".$line[0]."</p>";
+			echo "<p><span class=\"message_num\" id=message_".$message_num_counter.">".$message_num_counter.":</span><span class = \"username_view\">".$line[0]."</span></p>";
 			echo "<p class = \"message_view\">".$line[1]."</p>";
 			echo "<p class = \"date_view\">".$line[2]."</p>";
 			echo "</div>";
+			$message_num_counter++;
 			
 		}
 	}

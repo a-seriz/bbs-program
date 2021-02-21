@@ -1,8 +1,12 @@
-p.username_view{
+.username_view{
 	font-weight:bold;
 	color:red;
 }
 
-p.date_view{
+.date_view{
 	font-style:italic;
+}
+
+.message_num{
+	font-weight:bold;
 }
