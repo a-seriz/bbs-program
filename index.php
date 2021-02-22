@@ -45,6 +45,10 @@
 
 
 <?php
+	//最初にログファイルがなければ作成
+	if(!file_exists (FILE_PATH)){
+		touch(FILE_PATH);
+	}
 	$fp = fopen(FILE_PATH,"r");
 	if($fp){
 		$message_num_counter = 1;
