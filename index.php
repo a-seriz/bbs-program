@@ -53,10 +53,23 @@
 	if($fp){
 		$message_num_counter = 1;
 		while($line = fgetcsv($fp)){
-			
 			$msg = str_replace("\n","<br>",$line[1]);
-			echo "<div>";
-			echo "<p><span class=\"message_num\" id=message_".$message_num_counter.">".$message_num_counter.":</span><span class = \"username_view\">".$line[0]."</span></p>";
+			
+			//「>>レス番号」　をアンカーにするために正規表現で探し出して$anchersに代入
+			if(preg_match_all('/&gt;&gt;[0-9]{1,}/',$line[1],$anchers,PREG_SET_ORDER) >= 1){
+				//$anchersからレス番号のみを抽出（リンクにするため）
+				foreach($anchers as $ancher){
+						
+					$ancher_res_id = str_replace("&gt;&gt;","",$ancher[0]);
+					$msg = str_replace("${ancher[0]}","<a href=\"index.php#message_${ancher_res_id}\">${ancher[0]}</a><br>",$msg);
+				}
+				
+			}
+			
+			
+			
+			echo "<div id=\"message_${message_num_counter}\"";
+			echo "<p><span class=\"message_num\">".$message_num_counter.":</span><span class = \"username_view\">".$line[0]."</span></p>";
 			echo "<p class = \"message_view\">".$msg."</p>";
 			echo "<p class = \"date_view\">".$line[2]."</p>";
 			echo "</div>";
