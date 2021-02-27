@@ -5,6 +5,8 @@
 		$_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 	}
 	
+	require_once("./functions/bbs-rss.php");
+	
 ?>
 <!DOCTYPE html>
 <meta charset="utf-8">
