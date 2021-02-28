@@ -1,11 +1,14 @@
 <?php
+	//エラー出力設定
+	ini_set("display_errors",1);
+	
 	//csrf対策のtokenをセット
 	session_start();
 	if(!isset($_SESSION["csrf_token"])){
 		$_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 	}
 	
-	require_once("./functions/bbs-rss.php");
+	
 	
 ?>
 <!DOCTYPE html>
@@ -14,10 +17,19 @@
 <title>BBS-Sample</title>
 <!-- bbs top page -->
 <?php
-	ini_set("display_errors",1);
+	//初期設定
+	
 	define('FILE_PATH',"./logs/messages.csv");
 	date_default_timezone_set('Asia/Tokyo');
+	//functions/からインクルード
+	require_once("./functions/rss.php");
 	
+	
+	//rssの初期設定
+	$rss = new RssSetting("掲示板",
+	"url",
+	"掲示板ですよ～",
+	"./rss/rss.rdf");
 	
 	
 	
@@ -38,6 +50,9 @@
 				fputcsv($fp,$message_array);
 			}
 			fclose($fp);
+			//rss更新
+			$url = "ここにURLが入る";
+			$rss->update_rss($user_name,$url,"掲示板更新のお知らせ","新着レス",$message,$submit_date);
 		
 		}
 	}
@@ -51,6 +66,8 @@
 	if(!file_exists (FILE_PATH)){
 		touch(FILE_PATH);
 	}
+	
+	//ログファイルを読み取って表示する
 	$fp = fopen(FILE_PATH,"r");
 	if($fp){
 		$message_num_counter = 1;
@@ -59,7 +76,7 @@
 			
 			//「>>レス番号」　をアンカーにするために正規表現で探し出して$anchersに代入
 			if(preg_match_all('/&gt;&gt;[0-9]{1,}/',$line[1],$anchers,PREG_SET_ORDER) >= 1){
-				//$anchersからレス番号のみを抽出（リンクにするため）
+				//各レス番号へのリンク
 				foreach($anchers as $ancher){
 						
 					$ancher_res_id = str_replace("&gt;&gt;","",$ancher[0]);
@@ -69,7 +86,7 @@
 			}
 			
 			
-			
+			//divタグにレス番号をidとしてつける
 			echo "<div id=\"message_${message_num_counter}\"";
 			echo "<p><span class=\"message_num\">".$message_num_counter.":</span><span class = \"username_view\">".$line[0]."</span></p>";
 			echo "<p class = \"message_view\">".$msg."</p>";
