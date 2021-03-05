@@ -23,14 +23,14 @@
 	date_default_timezone_set('Asia/Tokyo');
 	//functions/からインクルード
 	require_once("./functions/rss.php");
+	require_once("./functions/utility.php");
 	
 	
 	//rssの初期設定
 	$rss = new RssSetting("掲示板",
-	"url",
+	get_url(),
 	"掲示板ですよ～",
 	"./rss/rss.rdf");
-	
 	
 	
 	
@@ -42,8 +42,8 @@
 			$user_name = htmlspecialchars($_POST["user_name"]);
 			$message = htmlspecialchars($_POST["message"]);
 			$submit_date =  date("y/n/d H:i:s");
-		
-			$message_array = array($user_name,$message,$submit_date);
+			$user_id = create_ID_from_ip_addr();
+			$message_array = array($user_name,$message,$submit_date,$user_id);
 			//ログファイルに書き込み
 			$fp = fopen(FILE_PATH,"a");
 			if($fp){
@@ -51,7 +51,7 @@
 			}
 			fclose($fp);
 			//rss更新
-			$url = "ここにURLが入る";
+			$url = get_url();
 			$rss->update_rss($user_name,$url,"掲示板更新のお知らせ","新着レス",$message,$submit_date);
 		
 		}
@@ -76,7 +76,7 @@
 			
 			//「>>レス番号」　をアンカーにするために正規表現で探し出して$anchersに代入
 			if(preg_match_all('/&gt;&gt;[0-9]{1,}/',$line[1],$anchers,PREG_SET_ORDER) >= 1){
-				//各レス番号へのリンク
+				//レスポンス先へのリンク
 				foreach($anchers as $ancher){
 						
 					$ancher_res_id = str_replace("&gt;&gt;","",$ancher[0]);
@@ -88,7 +88,7 @@
 			
 			//divタグにレス番号をidとしてつける
 			echo "<div id=\"message_${message_num_counter}\"";
-			echo "<p><span class=\"message_num\">".$message_num_counter.":</span><span class = \"username_view\">".$line[0]."</span></p>";
+			echo "<p><span class=\"message_num\">".$message_num_counter.":</span><span class = \"username_view\">".$line[0]." </span><span class=\"id_view\">ID:$line[3]</span></p>";
 			echo "<p class = \"message_view\">".$msg."</p>";
 			echo "<p class = \"date_view\">".$line[2]."</p>";
 			echo "</div>";

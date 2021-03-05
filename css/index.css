@@ -10,3 +10,11 @@
 .message_num{
 	font-weight:bold;
 }
+
+body{
+	background-color:silver;
+}
+.id_view{
+	font-style:italic;
+	
+}
