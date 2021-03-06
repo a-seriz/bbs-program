@@ -72,6 +72,12 @@
 	if($fp){
 		$message_num_counter = 1;
 		while($line = fgetcsv($fp)){
+			/*
+			*line[0]→ユーザー名
+			*line[1]→本文
+			*line[2]→日付
+			*line[3]→ID
+			*/
 			$msg = str_replace("\n","<br>",$line[1]);
 			
 			//「>>レス番号」　をアンカーにするために正規表現で探し出して$anchersに代入
@@ -87,11 +93,17 @@
 			
 			
 			//divタグにレス番号をidとしてつける
-			echo "<div id=\"message_${message_num_counter}\"";
-			echo "<p><span class=\"message_num\">".$message_num_counter.":</span><span class = \"username_view\">".$line[0]." </span><span class=\"id_view\">ID:$line[3]</span></p>";
-			echo "<p class = \"message_view\">".$msg."</p>";
-			echo "<p class = \"date_view\">".$line[2]."</p>";
-			echo "</div>";
+			$div = <<<__DIV__
+			<div id="message_${message_num_counter}">
+			<p><span class="message_num">$message_num_counter:</span><span class="username_view">$line[0]</span><span class="id_view">ID:$line[3]</span></p>
+			<p class ="message_view">$msg</p>
+			<p class ="date_view">$line[2]</p>
+			</div>
+__DIV__;
+			
+			
+			
+			echo $div;
 			$message_num_counter++;
 			
 		}
