@@ -16,6 +16,20 @@
 <link rel="stylesheet" href="css/index.css" type="text/css">
 <title>BBS-Sample</title>
 <!-- bbs top page -->
+<form action="index.php" method="post">
+	<input type="submit" value="更新">
+</form>
+<form action="index.php" method="post">
+	<p>
+		<label><input type="radio" name="display_num" value="50" checked required>50件表示</label>
+		<label><input type="radio" name="display_num" value="100">100件表示</label>
+		<label><input type="radio" name="display_num" value="all">全件表示(重いかも)</label>
+	</p>
+	<p>名前:<br><input type="text" value="名無しさん@テスト中" name="user_name"></p>
+	<p>本文:<br><textarea required name="message"></textarea></p>
+	<input type="hidden" name="csrf_token" value="<?php	echo $_SESSION["csrf_token"]?>">
+	<input type="submit" value="送信">
+</form>
 <?php
 	//初期設定
 	
@@ -70,6 +84,7 @@
 	//ログファイルを読み取って表示する
 	$fp = fopen(FILE_PATH,"r");
 	if($fp){
+		$msg_array = array();
 		$message_num_counter = 1;
 		while($line = fgetcsv($fp)){
 			/*
@@ -102,20 +117,17 @@
 __DIV__;
 			
 			
-			
-			echo $div;
+			array_push($msg_array,$div);
 			$message_num_counter++;
 			
 		}
-	}
+//上が最新になるように表示
+		for($i = count($msg_array);$i > 0;$i--){
+				echo $msg_array[$i - 1];
+			}	
+}
 	fclose($fp);
 ?>
 
 
 
-<form action="index.php" method="post">
-	<p>名前:<br><input type="text" value="名無しさん@テスト中" name="user_name"></p>
-	<p><br><textarea required name="message"></textarea></p>
-	<input type="hidden" name="csrf_token" value="<?php	echo $_SESSION["csrf_token"]?>">
-	<input type="submit" value="送信">
-</form>
