@@ -86,7 +86,7 @@
 				foreach($anchers as $ancher){
 						
 					$ancher_res_id = str_replace("&gt;&gt;","",$ancher[0]);
-					$msg = str_replace("${ancher[0]}","<a href=\"index.php#message_${ancher_res_id}\">${ancher[0]}</a><br>",$msg);
+					$msg = str_replace("${ancher[0]}","<a href=\"index.php#message_${ancher_res_id}\">${ancher[0]}</a>",$msg);
 				}
 				
 			}

@@ -23,6 +23,7 @@ XML;
 				}
 				else{
 					
+					echo htmlspecialchars($this->xml_template);
 					$this->xml_doc = new SimpleXMLElement($this->xml_template);
 					$this->xml_doc->channel->addChild("title",$page_title);
 					$this->xml_doc->channel->addChild("link",$rss_file_path);
