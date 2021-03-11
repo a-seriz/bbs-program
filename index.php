@@ -1,3 +1,7 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="css/index.css" type="text/css">
+<title>BBS-Sample</title>
 <?php
 	//エラー出力設定
 	ini_set("display_errors",1);
@@ -7,32 +11,7 @@
 	if(!isset($_SESSION["csrf_token"])){
 		$_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 	}
-	
-	
-	
-?>
-<!DOCTYPE html>
-<meta charset="utf-8">
-<link rel="stylesheet" href="css/index.css" type="text/css">
-<title>BBS-Sample</title>
-<!-- bbs top page -->
-<form action="index.php" method="post">
-	<input type="submit" value="更新">
-</form>
-<form action="index.php" method="post">
-	<p>
-		<label><input type="radio" name="display_num" value="50" checked required>50件表示</label>
-		<label><input type="radio" name="display_num" value="100">100件表示</label>
-		<label><input type="radio" name="display_num" value="all">全件表示(重いかも)</label>
-	</p>
-	<p>名前:<br><input type="text" value="名無しさん@テスト中" name="user_name"></p>
-	<p>本文:<br><textarea required name="message"></textarea></p>
-	<input type="hidden" name="csrf_token" value="<?php	echo $_SESSION["csrf_token"]?>">
-	<input type="submit" value="送信">
-</form>
-<?php
 	//初期設定
-	
 	define('FILE_PATH',"./logs/messages.csv");
 	date_default_timezone_set('Asia/Tokyo');
 	//functions/からインクルード
@@ -46,7 +25,8 @@
 	"掲示板ですよ～",
 	"./rss/rss.rdf");
 	
-	
+	//変数宣言
+	$disp_num = 50;//表示件数
 	
 	//POSTが存在しているか
 	if(!empty($_POST)){
@@ -67,6 +47,9 @@
 			//rss更新
 			$url = get_url();
 			$rss->update_rss($user_name,$url,"掲示板更新のお知らせ","新着レス",$message,$submit_date);
+			
+			//その他変数
+			$disp_num = $_POST["display_num"];
 		
 		}
 	}
@@ -74,6 +57,18 @@
 	
 ?>
 
+<!-- bbs top page -->
+<form action="index.php" method="post">
+	<p>
+		<label><input type="radio" name="display_num" value="50" required <?php if($disp_num == 50) {echo "checked";}?>>50件表示</label>
+		<label><input type="radio" name="display_num" value="100" <?php if($disp_num == 100) {echo "checked";}?>>100件表示</label>
+		<label><input type="radio" name="display_num" value="1000" <?php if($disp_num == 1000) {echo "checked";}?>>全件表示(重いかも)</label>
+	</p>
+	<p>名前:<br><input type="text" value="名無しさん@テスト中" name="user_name"></p>
+	<p>本文:<br><textarea required name="message"></textarea></p>
+	<input type="hidden" name="csrf_token" value="<?php	echo $_SESSION["csrf_token"]?>">
+	<input type="submit" value="送信"><label>
+</form>
 
 <?php
 	//最初にログファイルがなければ作成
@@ -86,6 +81,7 @@
 	if($fp){
 		$msg_array = array();
 		$message_num_counter = 1;
+		
 		while($line = fgetcsv($fp)){
 			/*
 			*line[0]→ユーザー名
@@ -115,15 +111,16 @@
 			<p class ="date_view">$line[2]</p>
 			</div>
 __DIV__;
-			
-			
 			array_push($msg_array,$div);
 			$message_num_counter++;
 			
+			
 		}
 //上が最新になるように表示
-		for($i = count($msg_array);$i > 0;$i--){
-				echo $msg_array[$i - 1];
+		$msg_array = array_reverse($msg_array);
+
+		for($i = 0;$i < count($msg_array) && $i < $disp_num;$i++){
+				echo $msg_array[$i];
 			}	
 }
 	fclose($fp);
