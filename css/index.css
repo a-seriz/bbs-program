@@ -13,8 +13,19 @@
 
 body{
 	background-color:silver;
+	padding-left:100px;
 }
 .id_view{
 	font-style:italic;
+	color:blue;
 	
+}
+
+textarea{
+	width:300px;
+	height:100px;
+}
+
+#thread_main{
+	font-size:20px;
 }

@@ -29,7 +29,7 @@
 	$disp_num = 50;//表示件数
 	
 	//POSTが存在しているか
-	if(!empty($_POST)){
+	if(!empty($_POST) && !empty($_POST["message"])){
 	//tokenを検証して一致していれば書き込み処理
 		if($_POST["csrf_token"] == $_SESSION["csrf_token"]){
 		
@@ -65,11 +65,11 @@
 		<label><input type="radio" name="display_num" value="1000" <?php if($disp_num == 1000) {echo "checked";}?>>全件表示(重いかも)</label>
 	</p>
 	<p>名前:<br><input type="text" value="名無しさん@テスト中" name="user_name"></p>
-	<p>本文:<br><textarea required name="message"></textarea></p>
+	<p>本文:<br><textarea name="message"></textarea></p>
 	<input type="hidden" name="csrf_token" value="<?php	echo $_SESSION["csrf_token"]?>">
-	<input type="submit" value="送信"><label>
+	<input type="submit" value="送信 / 更新">
 </form>
-
+<div id="thread_main">
 <?php
 	//最初にログファイルがなければ作成
 	if(!file_exists (FILE_PATH)){
@@ -125,6 +125,6 @@ __DIV__;
 }
 	fclose($fp);
 ?>
-
+</div>
 
 
