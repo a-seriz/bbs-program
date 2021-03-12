@@ -12,4 +12,12 @@
 		$id = substr($id,0,10);
 		return $id;
 	}
+	//textからURLを探してaタグで囲って返す
+	function url_to_link($text){
+			//処理後返される文字列
+			$returns = preg_replace('/(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/', '<a href="\\1\\2" target=\"_blank\">\\1\\2</a>', $text);
+			
+		return $returns;
+	}
+		
 ?>

@@ -92,6 +92,7 @@
 			$msg = str_replace("\n","<br>",$line[1]);
 			
 			//「>>レス番号」　をアンカーにするために正規表現で探し出して$anchersに代入
+			//preg_replaceを使うともっとスマートになる気がする？
 			if(preg_match_all('/&gt;&gt;[0-9]{1,}/',$line[1],$anchers,PREG_SET_ORDER) >= 1){
 				//レスポンス先へのリンク
 				foreach($anchers as $ancher){
@@ -101,6 +102,8 @@
 				}
 				
 			}
+			
+			$msg = url_to_link($msg);
 			
 			
 			//divタグにレス番号をidとしてつける
