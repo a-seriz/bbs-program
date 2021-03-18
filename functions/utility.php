@@ -12,6 +12,7 @@
 		$id = substr($id,0,10);
 		return $id;
 	}
+
 	//textからURLを探してaタグで囲って返す
 	function url_to_link($text){
 			//処理後返される文字列
@@ -19,5 +20,17 @@
 			
 		return $returns;
 	}
+	//csvファイルから配列を作る
+	function array_from_csv($csv_file_path){
+		$array = array();
+		$fp = fopen($csv_file_path,"r");
+		while($line = fgetcsv($fp)){
+				array_push($array,$line);
+			}
+		return $array;
+	}
+		
+	
+	
 		
 ?>
