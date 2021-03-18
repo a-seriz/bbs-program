@@ -152,7 +152,6 @@ else{
 	}	
 
 
-	//fclose($fp);
 ?>
 </div>
 

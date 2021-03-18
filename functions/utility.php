@@ -27,6 +27,7 @@
 		while($line = fgetcsv($fp)){
 				array_push($array,$line);
 			}
+		fclose($fp);
 		return $array;
 	}
 		
