@@ -17,7 +17,7 @@
 	require_once("./functions/defines.php");
 	require_once("./functions/rss.php");
 	require_once("./functions/utility.php");
-	
+	require_once("./functions/bbs-body.php");
 	
 	//rssの初期設定
 	$rss = new RssSetting("掲示板",
@@ -25,8 +25,15 @@
 	"掲示板ですよ～",
 	"./rss/rss.rdf");
 	
+	//ログファイルがなければ生成
+	if(!file_exists(MSG_LOG_FILE_PATH)){
+		touch(MSG_LOG_FILE_PATH);
+	}
+	
 	//変数宣言
 	$disp_num = 1000;//表示件数
+	$bbs_body = new BBS();
+	$bbs_body -> get_msg_from_file();
 	
 	//POSTが存在しているか
 	if(!empty($_POST) && !empty($_POST["message"])){
@@ -37,14 +44,11 @@
 			$message = htmlspecialchars($_POST["message"]);
 			$submit_date =  date("y/n/d H:i:s");
 			$user_id = create_ID_from_ip_addr();
-			$message_array = array($user_name,$message,$submit_date,$user_id);
 			
-			//ログファイルに書き込み
-			$fp = fopen(MSG_LOG_FILE_PATH,"a");
-			if($fp){
-				fputcsv($fp,$message_array);
-			}
-			fclose($fp);
+			
+			$bbs_body -> push_msg($user_name,$message,$submit_date,$user_id);
+			$bbs_body -> put_msg_to_file();
+			
 			//rss更新
 			$url = get_url();
 			$rss->update_rss($user_name,$url,"掲示板更新のお知らせ","新着レス",$message,$submit_date);
@@ -76,82 +80,7 @@
 </form>
 <div id="thread_body">
 <?php
-	//最初にログファイルがなければ作成
-	if(!file_exists (MSG_LOG_FILE_PATH)){
-		touch(MSG_LOG_FILE_PATH);
-	}
-	$logs = array_from_csv(MSG_LOG_FILE_PATH);//csvの中身そのままの配列
-	$msg_array = array();//URLへのリンクやレスアンカーのリンク化などの処理が施された、最終的に出力するdivタグの配列
-	$message_num_counter = 1;//レス番号カウンター
-	foreach($logs as $line){
-		/*
-			*line[0]→ユーザー名
-			*line[1]→本文
-			*line[2]→日付
-			*line[3]→ID
-		*/
-		//改行をbrタグ化
-		$msg = str_replace("\n","<br>",$line[1]);
-		
-		//「>>レス番号」　をアンカーにするために正規表現で探し出して$anchersに代入
-			//preg_replaceを使うともっとスマートになる気がする？
-			if(preg_match_all('/&gt;&gt;[0-9]{1,}/',$line[1],$anchers,PREG_SET_ORDER) >= 1){
-				//該当レス番号へのリンク
-				foreach($anchers as $ancher){
-					$ancher_res_id = str_replace("&gt;&gt;","",$ancher[0]);//idにするため「>>」を除去
-					$msg = str_replace("${ancher[0]}","<a href=\"index.php#message_${ancher_res_id}\">${ancher[0]}</a>",$msg);//idに飛ばすリンク　例：index.php#23
-				}
-				
-			}
-			$msg = url_to_link($msg);
-			//HN、日付、IDは配列そのまま　メッセージのみ整形後にしてdivタグで囲う
-			$div = <<<__DIV__
-			<div id="message_${message_num_counter}">
-			<p><span class="message_num">$message_num_counter:</span><span class="username_view">$line[0]</span><span class="id_view">ID:$line[3]</span></p>
-			<p class ="message_view">$msg</p>
-			<p class ="date_view">$line[2]</p>
-			</div>
-__DIV__;
-			array_push($msg_array,$div);
-			$message_num_counter++;
-		
-}
-
-	
-//検索欄が入力されていて空白ではない場合の処理
-/*
- * 現状、htmlタグをつけた後の$msg_arrayに対して検索をかけているので
- * htmlタグに含まれる文字列(div や id など)を検索すると全部引っかかってしまう問題がある
- * しかしcsvから読み込んだ直後の配列に対して検索を行うと
- * csvにはレス番号を保存していないので表示時にレス番号がわからないという問題もある
- * 解決方法として
- * ・書き込み時にレス番号を計算してcsvに同時に保存する
- * ・csvから読み込んだ後、一旦レス番号を付加し直す
- * が考えられる
- * 前者のほうが直感的な気がする
- * いずれにせよ既存コードの書き直しが発生して面倒なので一旦この状態で保存
- * */
-
-if(!empty($_GET) && $_GET["search_query"] != ""){
-		$results = array();
-		$search_query = $_GET["search_query"];
-		foreach($msg_array as $msg){
-				if(strstr($msg,$search_query) != false){
-						echo $msg;
-					}
-			}
-	}
-	
-//検索欄が入力されてなかった・空白である場合
-else{
-		//上が最新になるように表示
-		$msg_array = array_reverse($msg_array);
-		for($i = 0;$i < count($msg_array) && $i < $disp_num;$i++){
-				echo $msg_array[$i];
-			}
-	}	
-
-
+	$bbs_body -> print_msg_html();
 ?>
 </div>
 
