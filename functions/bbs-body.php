@@ -54,6 +54,17 @@
 		
 		function msg_to_html(){
 			//$all_msg_infoを$msg_htmlに整形する関数
+			foreach($this->all_msg_info as $msg_info){
+				$this->msg_html .= <<<__HTML__
+			<div id="message_${msg_info["msg_id"]}">
+			<p><span class="message_num">${msg_info["msg_id"]}:</span><span class="username_view">${msg_info["user_name"]}</span><span class="id_view">ID:${msg_info["user_id"]}</span></p>
+			<p class ="message_view">${msg_info["msg"]}</p>
+			<p class ="date_view">${msg_info["submit_date"]}</p>
+			</div>
+__HTML__;
+			}
+			
+			
 		}
 		
 		function search_msg(){
@@ -62,7 +73,7 @@
 		
 		function print_msg_html(){
 			//$msg_htmlを出力する関数
-			
+			echo $this->msg_html;
 		}
 		
 		function __construct(){

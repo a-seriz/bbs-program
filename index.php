@@ -80,6 +80,7 @@
 </form>
 <div id="thread_body">
 <?php
+	$bbs_body -> msg_to_html();
 	$bbs_body -> print_msg_html();
 ?>
 </div>
