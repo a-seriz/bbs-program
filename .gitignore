@@ -2,3 +2,5 @@
 .htaccess
 *.rdf
 *.txt
+*.html
+*.json

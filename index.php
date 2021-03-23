@@ -58,6 +58,11 @@
 	
 	
 ?>
+<section id="page_header">
+	<h1>雑談掲示板</h1>
+	雑談にどうぞ。<br>
+	100レスごとに自動的にアーカイブされます。
+</section>
 <div id="thread_body">
 <?php
 	$bbs_body -> msg_to_html();
@@ -66,7 +71,7 @@
 ?>
 </div>
 <form action="index.php" method="post">
-	<p>名前:<input type="text" value="名無しさん@テスト中" name="user_name"></p>
+	<p>名前:<input type="text" value=<?php if(isset($_POST["user_name"]) && !empty($_POST["user_name"])){ echo $_POST["user_name"];}else{echo DEFAULT_USER_NAME;}?> name="user_name"></p>
 	<p>本文:<br><textarea name="message"></textarea></p>
 	<input type="hidden" name="csrf_token" value="<?php	echo $_SESSION["csrf_token"]?>">
 	<input type="submit" value="送信 / 更新">
