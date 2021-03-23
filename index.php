@@ -61,17 +61,17 @@
 	
 	
 ?>
-
-<!-- bbs top page -->
+※表示件数変更機能および検索機能は未実装です。<br>
 <form action="index.php" method="get">
 	<p>検索：<input type="text" name="search_query"><input type="submit" value="検索"></p>
 	
 </form>
 <form action="index.php" method="post">
 	<p>
+		
 		<label><input type="radio" name="display_num" value="50" required <?php if($disp_num == 50) {echo "checked";}?>>50件表示</label>
 		<label><input type="radio" name="display_num" value="100" <?php if($disp_num == 100) {echo "checked";}?>>100件表示</label>
-		<label><input type="radio" name="display_num" value="1000" <?php if($disp_num == 1000) {echo "checked";}?>>全件表示(重いかも)</label>
+		<label><input type="radio" name="display_num" value="1000" <?php if($disp_num == 1000) {echo "checked";}?>>1000件表示（すべて）</label>
 	</p>
 	<p>名前:<input type="text" value="名無しさん@テスト中" name="user_name"></p>
 	<p>本文:<br><textarea name="message"></textarea></p>

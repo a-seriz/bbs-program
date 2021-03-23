@@ -55,12 +55,26 @@
 		function msg_to_html(){
 			//$all_msg_infoを$msg_htmlに整形する関数
 			foreach($this->all_msg_info as $msg_info){
+				//改行変換
+				$msg = str_replace("\n","<br>",$msg_info["msg"]);
+				
+				//「>>レス番号」　をアンカーにするために正規表現で探し出して$anchersに代入
+				if(preg_match_all('/&gt;&gt;[0-9]{1,}/',$msg,$anchers,PREG_SET_ORDER) >= 1){
+					//アンカーをaタグで囲う
+					foreach($anchers as $ancher){
+						$ancher_res_id = str_replace("&gt;&gt;","",$ancher[0]);//idにするため「>>」を除去
+						$msg = str_replace("${ancher[0]}","<a href=\"index.php#message_${ancher_res_id}\">${ancher[0]}</a>",$msg);//idに飛ばすリンク　例：index.php#message_23
+					}
+				
+				}
+				$msg = url_to_link($msg);
+				//$msg_htmlに追加
 				$this->msg_html .= <<<__HTML__
-			<div id="message_${msg_info["msg_id"]}">
-			<p><span class="message_num">${msg_info["msg_id"]}:</span><span class="username_view">${msg_info["user_name"]}</span><span class="id_view">ID:${msg_info["user_id"]}</span></p>
-			<p class ="message_view">${msg_info["msg"]}</p>
-			<p class ="date_view">${msg_info["submit_date"]}</p>
-			</div>
+				<div id="message_${msg_info["msg_id"]}">
+					<p><span class="message_num">${msg_info["msg_id"]}:</span><span class="username_view">${msg_info["user_name"]}</span><span class="id_view">ID:${msg_info["user_id"]}</span></p>
+					<p class ="message_view">${msg}</p>
+					<p class ="date_view">${msg_info["submit_date"]}</p>
+				</div>
 __HTML__;
 			}
 			
