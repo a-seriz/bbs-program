@@ -22,7 +22,7 @@
 			//ログファイルからメッセージを読み込む関数
 			if(file_exists(MSG_LOG_FILE_PATH)){
 				$this->json = file_get_contents(MSG_LOG_FILE_PATH);
-				if($this->json != "null"){	
+				if($this->json != null){	
 					$this->all_msg_info = mb_convert_encoding($this->json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
 					$this->all_msg_info = json_decode($this->all_msg_info,true);
 				}
@@ -54,6 +54,9 @@
 		
 		function msg_to_html(){
 			//$all_msg_infoを$msg_htmlに整形する関数
+			if(!is_array($this->all_msg_info)){
+					return;
+				}
 			foreach($this->all_msg_info as $msg_info){
 				//改行変換
 				$msg = str_replace("\n","<br>",$msg_info["msg"]);
