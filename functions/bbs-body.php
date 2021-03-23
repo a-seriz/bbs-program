@@ -54,6 +54,8 @@
 		
 		function msg_to_html(){
 			//$all_msg_infoを$msg_htmlに整形する関数
+			$this->get_msg_from_file();
+			//メッセージがなければ終了
 			if(!is_array($this->all_msg_info)){
 					return;
 				}
@@ -91,6 +93,33 @@ __HTML__;
 		function print_msg_html(){
 			//$msg_htmlを出力する関数
 			echo $this->msg_html;
+		}
+		
+		function check_archive(){
+			//レス数が上限を超えたとき、スレッドをhtmlファイルとしてアーカイブする機能
+			
+			if(!is_array($this->all_msg_info)||count($this->all_msg_info) < THREAD_RES_LIMIT){
+					//上限に達していなかったら終了
+					return;
+				}
+			$archived_date = date("y-n-d-H-i-s");
+			$h = <<< _HTML_
+			<meta charset="utf-8">
+			<title>雑談過去ログ-${archived_date}-</title>
+			<link rel="stylesheet" href="../../css/index.css"
+			<div id="thread_body">
+				$this->msg_html
+			</div>
+_HTML_;
+			file_put_contents("./logs/old-thread/${archived_date}.html",$h,LOCK_EX);
+			
+			//message.jsonを初期化
+			$fp = fopen(MSG_LOG_FILE_PATH,"r+");
+			flock($fp,LOCK_EX);
+			ftruncate($fp,0);
+			flock($fp,LOCK_UN);
+			fclose($fp);
+			
 		}
 		
 		function __construct(){

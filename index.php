@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <link rel="stylesheet" href="css/index.css" type="text/css">
-<title>BBS-Sample</title>
+<title>雑談掲示板</title>
 <?php
 	//エラー出力設定
 	ini_set("display_errors",1);
@@ -23,7 +23,7 @@
 	$rss = new RssSetting("掲示板",
 	get_url(),
 	"掲示板ですよ～",
-	"./rss/rss.rdf");
+	"./rss/rss.rdf");	
 	
 	//ログファイルがなければ生成
 	if(!file_exists(MSG_LOG_FILE_PATH)){
@@ -52,37 +52,25 @@
 			//rss更新
 			$url = get_url();
 			$rss->update_rss($user_name,$url,"掲示板更新のお知らせ","新着レス",$message,$submit_date);
-			
-			//その他変数
-			$disp_num = $_POST["display_num"];
 		
 		}
 	}
 	
 	
 ?>
-※表示件数変更機能および検索機能は未実装です。<br>
-<form action="index.php" method="get">
-	<p>検索：<input type="text" name="search_query"><input type="submit" value="検索"></p>
-	
-</form>
+<div id="thread_body">
+<?php
+	$bbs_body -> msg_to_html();
+	$bbs_body -> print_msg_html();
+	$bbs_body -> check_archive();
+?>
+</div>
 <form action="index.php" method="post">
-	<p>
-		
-		<label><input type="radio" name="display_num" value="50" required <?php if($disp_num == 50) {echo "checked";}?>>50件表示</label>
-		<label><input type="radio" name="display_num" value="100" <?php if($disp_num == 100) {echo "checked";}?>>100件表示</label>
-		<label><input type="radio" name="display_num" value="1000" <?php if($disp_num == 1000) {echo "checked";}?>>1000件表示（すべて）</label>
-	</p>
 	<p>名前:<input type="text" value="名無しさん@テスト中" name="user_name"></p>
 	<p>本文:<br><textarea name="message"></textarea></p>
 	<input type="hidden" name="csrf_token" value="<?php	echo $_SESSION["csrf_token"]?>">
 	<input type="submit" value="送信 / 更新">
 </form>
-<div id="thread_body">
-<?php
-	$bbs_body -> msg_to_html();
-	$bbs_body -> print_msg_html();
-?>
-</div>
+
 
 
