@@ -1,0 +1,27 @@
+.username_view{
+	font-weight:bold;
+	color:red;
+}
+
+.date_view{
+	font-style:italic;
+}
+
+.message_num{
+	font-weight:bold;
+}
+
+body{
+	background-color:silver;
+	padding-left:100px;
+}
+.id_view{
+	font-style:italic;
+	color:blue;
+	
+}
+
+
+#thread_body{
+	font-size:20px;
+}
