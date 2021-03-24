@@ -68,7 +68,7 @@
 					//アンカーをaタグで囲う
 					foreach($anchers as $ancher){
 						$ancher_res_id = str_replace("&gt;&gt;","",$ancher[0]);//idにするため「>>」を除去
-						$msg = str_replace("${ancher[0]}","<a href=\"index.php#message_${ancher_res_id}\">${ancher[0]}</a>",$msg);//idに飛ばすリンク　例：index.php#message_23
+						$msg = str_replace("${ancher[0]}","<a href=\"#message_${ancher_res_id}\">${ancher[0]}</a>",$msg);//idに飛ばすリンク　例：index.php#message_23
 					}
 				
 				}

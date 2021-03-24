@@ -63,6 +63,7 @@
 	雑談にどうぞ。<br>
 	100レスごとに自動的にアーカイブされます。
 </section>
+
 <div id="thread_body">
 <?php
 	$bbs_body -> msg_to_html();
@@ -76,6 +77,10 @@
 	<input type="hidden" name="csrf_token" value="<?php	echo $_SESSION["csrf_token"]?>">
 	<input type="submit" value="送信 / 更新">
 </form>
+<script src="./js/index.js">
+	
+</script>
+
 
 
 

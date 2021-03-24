@@ -28,7 +28,7 @@ textarea{
 
 #thread_body{
 	font-size:20px;
-	height:500px;
+	height:300px;
 	overflow:auto;
 	border:2px dotted #0f0f0f;
 }
