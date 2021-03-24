@@ -77,9 +77,7 @@
 	<input type="hidden" name="csrf_token" value="<?php	echo $_SESSION["csrf_token"]?>">
 	<input type="submit" value="送信 / 更新">
 </form>
-<script src="./js/index.js">
-	
-</script>
+<script src="./script/index.js"></script>
 
 
 
