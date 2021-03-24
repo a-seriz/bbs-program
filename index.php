@@ -61,7 +61,8 @@
 <section id="page_header">
 	<h1>雑談掲示板</h1>
 	雑談にどうぞ。<br>
-	100レスごとに自動的にアーカイブされます。
+	100レスごとに自動的にアーカイブされます。<br>
+	アーカイブ一覧は<a href="./archive_list.php" target="_blank">こちら</a>
 </section>
 
 <div id="thread_body">
