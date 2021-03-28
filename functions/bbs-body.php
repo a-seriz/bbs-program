@@ -111,7 +111,7 @@ __HTML__;
 				$this->msg_html
 			</div>
 _HTML_;
-			file_put_contents("./logs/old-thread/${archived_date}.html",$h,LOCK_EX);
+			file_put_contents("./logs/old-threads/${archived_date}.html",$h,LOCK_EX);
 			
 			//message.jsonを初期化
 			$fp = fopen(MSG_LOG_FILE_PATH,"r+");

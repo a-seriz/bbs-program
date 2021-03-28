@@ -15,12 +15,12 @@
 	date_default_timezone_set('Asia/Tokyo');
 	//functions/からインクルード
 	require_once("./functions/defines.php");
-	//require_once("./functions/rss.php");
 	require_once("./functions/utility.php");
 	require_once("./functions/bbs-body.php");
-	
-	//rssの初期設定
 	/*
+	RSS関連の記述
+	//require_once("./functions/rss.php");
+	//rssの初期設定
 	$rss = new RssSetting("掲示板",
 	get_url(),
 	"掲示板ですよ～",
@@ -28,8 +28,6 @@
 	*/
 	
 	
-	//変数宣言
-	$disp_num = 1000;//表示件数
 	$bbs_body = new BBS();
 	$bbs_body -> get_msg_from_file();
 	
@@ -47,8 +45,9 @@
 			$bbs_body -> push_msg($user_name,$message,$submit_date,$user_id);
 			$bbs_body -> put_msg_to_file();
 			
+		/*	
+			RSS関連の記述
 			//rss更新
-			/*
 			$url = get_url();
 			$rss->update_rss($user_name,$url,"掲示板更新のお知らせ","新着レス",$message,$submit_date);
 		*/
@@ -58,9 +57,9 @@
 	
 ?>
 <section id="page_header">
-	<h1>雑談掲示板</h1>
-	雑談にどうぞ。<br>
-	100レスごとに自動的にアーカイブされます。<br>
+	<h1><?php echo BBS_TITLE; ?></h1>
+	<?php echo BBS_INFO ?><br>
+	<?php echo THREAD_RES_LIMIT; ?>レスごとに自動的にアーカイブされます。<br>
 	アーカイブ一覧は<a href="./archive_list.php" target="_blank">こちら</a>
 </section>
 
