@@ -1,5 +1,5 @@
 <?php
-
+	require_once('./defines.php');
 	class RssSetting{
 			
 			protected $xml_template = <<<XML
@@ -11,7 +11,12 @@
 </rss>
 XML;
 			protected $page_title,$page_url,$page_description,$rss_file_path,$rss_template,$xml_doc;
-			function __construct($page_title,$page_url,$page_description,$rss_file_path){	
+			function __construct($page_title,$page_url,$page_description,$rss_file_path){
+				//rssディレクトリがなければ作成
+				if(!file_exists(RSS_FILES_DIR)){
+					mkdir(RSS_FILES_DIR);
+					touch();
+				}
 				$this->page_title = $page_title;
 				$this->page_url = $page_url;
 				$this->page_description = $page_description;

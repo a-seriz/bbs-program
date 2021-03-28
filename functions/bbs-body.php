@@ -123,7 +123,16 @@ _HTML_;
 		}
 		
 		function __construct(){
-				
+			//ログファイル・ディレクトリがなければ生成
+			if(!file_exists(MSG_LOG_DIR_PATH)){
+				mkdir(MSG_LOG_DIR_PATH);
+			}
+			if(!file_exists(MSG_LOG_FILE_PATH)){
+				touch(MSG_LOG_FILE_PATH);
+			}
+			if(!file_exists(OLD_THREAD_DIR_PATH)){
+				mkdir(OLD_THREAD_DIR_PATH);
+			}
 		}
 	}
 ?>

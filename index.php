@@ -15,20 +15,18 @@
 	date_default_timezone_set('Asia/Tokyo');
 	//functions/からインクルード
 	require_once("./functions/defines.php");
-	require_once("./functions/rss.php");
+	//require_once("./functions/rss.php");
 	require_once("./functions/utility.php");
 	require_once("./functions/bbs-body.php");
 	
 	//rssの初期設定
+	/*
 	$rss = new RssSetting("掲示板",
 	get_url(),
 	"掲示板ですよ～",
 	"./rss/rss.rdf");	
+	*/
 	
-	//ログファイルがなければ生成
-	if(!file_exists(MSG_LOG_FILE_PATH)){
-		touch(MSG_LOG_FILE_PATH);
-	}
 	
 	//変数宣言
 	$disp_num = 1000;//表示件数
@@ -50,9 +48,10 @@
 			$bbs_body -> put_msg_to_file();
 			
 			//rss更新
+			/*
 			$url = get_url();
 			$rss->update_rss($user_name,$url,"掲示板更新のお知らせ","新着レス",$message,$submit_date);
-		
+		*/
 		}
 	}
 	
