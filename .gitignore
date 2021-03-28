@@ -1,6 +1,7 @@
 *.csv
-.htaccess
 *.rdf
 *.txt
 *.html
 *.json
+./logs/
+./logs/*
