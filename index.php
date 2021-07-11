@@ -17,15 +17,7 @@
 	require_once("./functions/defines.php");
 	require_once("./functions/utility.php");
 	require_once("./functions/bbs-body.php");
-	/*
-	RSS関連の記述
-	//require_once("./functions/rss.php");
-	//rssの初期設定
-	$rss = new RssSetting("掲示板",
-	get_url(),
-	"掲示板ですよ～",
-	"./rss/rss.rdf");	
-	*/
+
 	
 	
 	$bbs_body = new BBS();
@@ -44,13 +36,6 @@
 			
 			$bbs_body -> push_msg($user_name,$message,$submit_date,$user_id);
 			$bbs_body -> put_msg_to_file();
-			
-		/*	
-			RSS関連の記述
-			//rss更新
-			$url = get_url();
-			$rss->update_rss($user_name,$url,"掲示板更新のお知らせ","新着レス",$message,$submit_date);
-		*/
 		}
 	}
 	
@@ -71,8 +56,8 @@
 ?>
 </div>
 <form action="index.php" method="post">
-	<p>名前:<input type="text" value=<?php if(isset($_POST["user_name"]) && !empty($_POST["user_name"])){ echo $_POST["user_name"];}else{echo DEFAULT_USER_NAME;}?> name="user_name"></p>
-	<p>本文:<br><textarea name="message"></textarea></p>
+	<p>名前:<input type="text" value=<?php if(isset($_POST["user_name"]) && !empty($_POST["user_name"])){ echo $_POST["user_name"];}else{echo DEFAULT_USER_NAME;}?> name="user_name" maxlength="20"></p>
+	<p>本文:<br><textarea name="message" maxlength="500"></textarea></p>
 	<input type="hidden" name="csrf_token" value="<?php	echo $_SESSION["csrf_token"]?>">
 	<input type="submit" value="送信 / 更新">
 </form>
